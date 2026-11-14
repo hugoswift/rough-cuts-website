@@ -1,0 +1,207 @@
+/* Rough Cuts: coming-soon page.
+   Plain JavaScript, no libraries. Does four things:
+   1. Sizes the ROUGH CUTS wordmark to the width of the screen (stacked on phones).
+   2. Makes the orange layer of the wordmark follow the pointer.
+   3. Runs the Dark mode and Animation switches in the header (and remembers them).
+   4. Tells the page when the fonts are ready so the "power-on" can play.
+   The page still reads fine without any of this. */
+(function () {
+  'use strict';
+
+  var root = document.documentElement;
+  var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* private mode: fine, just not remembered */ }
+  }
+
+  /* ---------- Switches ---------- */
+
+  var themeBtn = document.getElementById('sw-theme');
+  var motionBtn = document.getElementById('sw-motion');
+
+  function currentTheme() {
+    var t = root.getAttribute('data-theme');
+    if (t === 'dark' || t === 'light') return t;
+    return darkQuery && darkQuery.matches ? 'dark' : 'light';
+  }
+
+  function motionOn() {
+    var m = root.getAttribute('data-motion');
+    if (m === 'off') return false;
+    if (m === 'on') return true;
+    return !(reduceQuery && reduceQuery.matches);
+  }
+
+  function syncSwitches() {
+    if (themeBtn) themeBtn.setAttribute('aria-checked', String(currentTheme() === 'dark'));
+    if (motionBtn) motionBtn.setAttribute('aria-checked', String(motionOn()));
+  }
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      save('rc-theme', next);
+      syncSwitches();
+    });
+  }
+
+  if (motionBtn) {
+    motionBtn.addEventListener('click', function () {
+      var next = motionOn() ? 'off' : 'on';
+      root.setAttribute('data-motion', next);
+      save('rc-motion', next);
+      if (next === 'off') { pointer.x = 0; pointer.y = 0; setPlate(0, 0); }
+      syncSwitches();
+    });
+  }
+
+  /* Follow the device setting until the visitor makes their own choice. */
+  function onQueryChange() { syncSwitches(); }
+  if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener('change', onQueryChange);
+  if (reduceQuery && reduceQuery.addEventListener) reduceQuery.addEventListener('change', onQueryChange);
+
+  /* ---------- Wordmark sizing ---------- */
+
+  var svgs = Array.prototype.slice.call(document.querySelectorAll('.wm-svg'));
+  var plates = Array.prototype.slice.call(document.querySelectorAll('.plate'));
+  var metrics = null;
+  var refSize = 288;
+
+  function r1(n) { return String(Math.round(n * 10) / 10); }
+
+  /* Measures the lettering in "em" units so the maths works for whichever font is showing. */
+  function measure() {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext && canvas.getContext('2d');
+    if (!ctx) return null;
+    ctx.font = '200px Anton, Impact, "Arial Narrow", sans-serif';
+    function em(s) { return ctx.measureText(s).width / 200 + s.length * -0.01; }
+    var ascent = ctx.measureText('ROUGH').actualBoundingBoxAscent;
+    return { full: em('ROUGH CUTS'), rough: em('ROUGH'), cuts: em('CUTS'), cap: (ascent || 144) / 200 };
+  }
+
+  function layout() {
+    if (!metrics) metrics = measure();
+    if (!metrics || !svgs.length) return;
+    var m = metrics;
+    var w = root.clientWidth || window.innerWidth || 1440;
+    var wide = w >= 700;
+    var fsFull = (w * 0.94) / m.full;
+    var capFull = m.cap * fsFull;
+    var fsA = (w * 0.92) / m.rough;
+    var fsB = (w * 0.92) / m.cuts;
+    var capA = m.cap * fsA;
+    var capB = m.cap * fsB;
+    var yA = capA * 1.04;
+    var yB = yA + capA * 0.08 + capB;
+    var vbH = wide ? capFull * 1.14 : yB + capB * 0.1;
+    refSize = wide ? fsFull : fsA;
+
+    var spec = {
+      full: { x: w * 0.03, y: capFull * 1.02, fs: fsFull },
+      rough: { x: w * 0.04, y: yA, fs: fsA },
+      cuts: { x: w * 0.04, y: yB, fs: fsB }
+    };
+
+    svgs.forEach(function (svg) {
+      svg.setAttribute('viewBox', '0 0 ' + r1(w) + ' ' + r1(vbH));
+      var texts = svg.querySelectorAll('text[data-role]');
+      Array.prototype.forEach.call(texts, function (t) {
+        var role = t.getAttribute('data-role');
+        var s = spec[role];
+        var show = role === 'full' ? wide : !wide;
+        t.setAttribute('display', show ? 'inline' : 'none');
+        t.setAttribute('x', r1(s.x));
+        t.setAttribute('y', r1(s.y));
+        t.setAttribute('font-size', r1(s.fs));
+        t.setAttribute('letter-spacing', r1(-0.01 * s.fs));
+        t.style.setProperty('--fs', r1(s.fs) + 'px');
+      });
+    });
+    setPlate(pointer.x, pointer.y);
+  }
+
+  /* ---------- Orange layer follows the pointer ---------- */
+
+  var pointer = { x: 0, y: 0 };
+  var frame = 0;
+
+  function setPlate(mx, my) {
+    var tx = -(0.01 + mx * 0.02) * refSize;
+    var ty = my * 0.006 * refSize;
+    plates.forEach(function (g) { g.setAttribute('transform', 'translate(' + r1(tx) + ' ' + r1(ty) + ')'); });
+  }
+
+  function onPointer(x, y) {
+    if (!motionOn()) return;
+    var w = window.innerWidth || 1440;
+    var h = window.innerHeight || 900;
+    pointer.x = (x / w) * 2 - 1;
+    pointer.y = (y / h) * 2 - 1;
+    if (frame) return;
+    frame = window.requestAnimationFrame(function () {
+      frame = 0;
+      setPlate(pointer.x, pointer.y);
+    });
+  }
+
+  window.addEventListener('mousemove', function (e) { onPointer(e.clientX, e.clientY); }, { passive: true });
+  window.addEventListener('touchmove', function (e) {
+    if (e.touches && e.touches[0]) onPointer(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+
+  var heading = document.getElementById('wordmark');
+  if (heading) {
+    heading.addEventListener('mouseenter', function () { if (motionOn()) heading.classList.add('hot'); });
+    heading.addEventListener('mouseleave', function () { heading.classList.remove('hot'); });
+  }
+
+  /* ---------- Start-up ---------- */
+
+  var resizeFrame = 0;
+  window.addEventListener('resize', function () {
+    if (resizeFrame) return;
+    resizeFrame = window.requestAnimationFrame(function () { resizeFrame = 0; layout(); });
+  });
+
+  var readied = false;
+  function ready() {
+    if (readied) return;
+    readied = true;
+    metrics = null;
+    layout();
+    root.classList.add('ready');
+  }
+
+  syncSwitches();
+  layout();
+
+  function loadFonts() {
+    Promise.all([
+      document.fonts.load('200px Anton'),
+      document.fonts.load('italic 64px "Instrument Serif"'),
+      document.fonts.load('700 16px "Space Mono"')
+    ]).then(ready, ready);
+  }
+
+  if (document.fonts && document.fonts.load) {
+    if (document.fonts.addEventListener) {
+      document.fonts.addEventListener('loadingdone', function () { metrics = null; layout(); });
+    }
+    /* The font stylesheet loads in the background; wait for it, then for the fonts themselves. */
+    var fontLink = document.getElementById('fonts-css');
+    if (fontLink && !fontLink.sheet) {
+      fontLink.addEventListener('load', loadFonts);
+      fontLink.addEventListener('error', ready);
+    } else {
+      loadFonts();
+    }
+  } else {
+    ready();
+  }
+  /* If the fonts are slow or blocked, show the page anyway. */
+  window.setTimeout(ready, 2500);
+})();

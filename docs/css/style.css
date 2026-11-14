@@ -1,0 +1,378 @@
+/* Rough Cuts: coming-soon page.
+   Plain CSS, no build step. All colours live in the variables just below.
+   Light is the default; dark applies when the visitor's device is set to dark,
+   or when they flip the Dark mode switch. KEEP THE TWO DARK BLOCKS IN SYNC. */
+
+:root {
+  --bg: #DAD1BC;
+  --ink: #131211;
+  --acc: #EE4D1F;      /* orange for shapes */
+  --acct: #A02A08;     /* darker orange for small text (passes contrast on paper) */
+  --dim: #2B2824;
+  --btnbg: #131211;
+  --btnink: #DAD1BC;
+  --hov: #131211;
+  --hovink: #DAD1BC;
+  --focus: #131211;
+  --rule: 3px solid #131211;
+  --hrule: 3px solid #131211;
+  --scan: rgba(0, 0, 0, .045);
+  --vig: radial-gradient(ellipse at center, transparent 60%, rgba(70, 45, 20, .25) 100%);
+  --gb: overlay;
+  --roll: rgba(255, 255, 255, .08);
+  --glow: none;
+  --pb1: 1.5;
+  --pb2: 1.2;
+  --grain-op: .5;
+  --halo: .018;
+  --dotglow: 0 0 0 transparent;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F0E0D;
+    --ink: #E8E0CC;
+    --acc: #FF5A2B;
+    --acct: #FF5A2B;
+    --dim: #C9C0AA;
+    --btnbg: #E8E0CC;
+    --btnink: #0F0E0D;
+    --hov: #FF5A2B;
+    --hovink: #0F0E0D;
+    --focus: #FF5A2B;
+    --rule: 1px solid rgba(232, 224, 204, .35);
+    --hrule: 1px solid transparent;
+    --scan: rgba(0, 0, 0, .22);
+    --vig: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, .55) 100%);
+    --gb: screen;
+    --roll: rgba(255, 255, 255, .06);
+    --glow: drop-shadow(0 0 28px rgba(255, 90, 43, .28));
+    --pb1: 7;
+    --pb2: 2;
+    --grain-op: .16;
+    --halo: 0;
+    --dotglow: 0 0 10px rgba(255, 90, 43, .85);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0F0E0D;
+  --ink: #E8E0CC;
+  --acc: #FF5A2B;
+  --acct: #FF5A2B;
+  --dim: #C9C0AA;
+  --btnbg: #E8E0CC;
+  --btnink: #0F0E0D;
+  --hov: #FF5A2B;
+  --hovink: #0F0E0D;
+  --focus: #FF5A2B;
+  --rule: 1px solid rgba(232, 224, 204, .35);
+  --hrule: 1px solid transparent;
+  --scan: rgba(0, 0, 0, .22);
+  --vig: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, .55) 100%);
+  --gb: screen;
+  --roll: rgba(255, 255, 255, .06);
+  --glow: drop-shadow(0 0 28px rgba(255, 90, 43, .28));
+  --pb1: 7;
+  --pb2: 2;
+  --grain-op: .16;
+  --halo: 0;
+  --dotglow: 0 0 10px rgba(255, 90, 43, .85);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* ---------- Page structure ---------- */
+
+.screen {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 24px;
+  margin: clamp(14px, 2.2vw, 30px) clamp(20px, 3vw, 44px) 0;
+  padding-bottom: 6px;
+  border-bottom: var(--hrule);
+  font-size: clamp(14px, 1.3vw, 18px);
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.top-end { display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; }
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(24px, 3.4vw, 52px);
+  padding: clamp(16px, 2vw, 32px) 0;
+}
+
+.wm-h1 { position: relative; margin: 0; line-height: 0; }
+
+.wm-svg { display: block; width: 100%; height: auto; }
+.wm-main { filter: var(--glow); }
+.wm { font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; font-weight: 400; }
+.f-ink { fill: var(--ink); }
+.f-acc { fill: var(--acc); }
+.halo { stroke: var(--acc); stroke-width: calc(var(--halo) * var(--fs, 0px)); }
+
+.intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 40px;
+  padding: 0 clamp(20px, 3vw, 44px);
+}
+
+.jam {
+  margin: 0;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(56px, 8vw, 128px);
+  line-height: .95;
+  letter-spacing: -.03em;
+}
+
+.tagline {
+  margin: clamp(8px, 1vw, 14px) 0 0;
+  font-size: clamp(16px, 1.9vw, 28px);
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.signup { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+
+.soon {
+  margin: 0;
+  font-size: clamp(16px, 1.4vw, 20px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cta-note {
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.5;
+  color: var(--dim);
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 32px;
+  margin: 0 clamp(20px, 3vw, 44px);
+  padding: 12px 0 clamp(16px, 2vw, 28px);
+  border-top: var(--rule);
+  font-size: clamp(14px, 1.3vw, 18px);
+  font-weight: 700;
+}
+
+.status { margin: 0; color: var(--acct); letter-spacing: .08em; text-transform: uppercase; }
+
+.foot ul { display: flex; flex-wrap: wrap; gap: 4px 28px; margin: 0; padding: 0; list-style: none; }
+
+/* Short laptop windows: tighten the spacing a little so everything still fits on one screen. */
+@media (min-width: 700px) and (max-height: 780px) {
+  main { gap: 20px; padding: 8px 0; }
+  .jam { font-size: clamp(48px, 6vw, 88px); }
+  .tagline { margin-top: 6px; }
+}
+
+/* ---------- Links, button, switches ---------- */
+
+a.lnk {
+  display: inline-block;
+  padding: 10px 4px;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  overflow-wrap: anywhere;
+  margin-inline: -4px; /* so the link text lines up with the text around it */
+}
+a.lnk:hover { background: var(--hov); color: var(--hovink); }
+a.lnk:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+/* Sign-up button: not shown yet. Its markup is in a comment in index.html. */
+a.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 24px;
+  background: var(--btnbg);
+  color: var(--btnink);
+  font-size: clamp(16px, 1.4vw, 20px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 6px 6px 0 var(--acc);
+  transition: transform .12s, box-shadow .12s;
+}
+a.cta:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--acc); }
+a.cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
+
+/* The switches need JavaScript, so they only appear when it is running. */
+.sw { display: none; }
+.js .sw {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+.sw .dot {
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  transition: background .15s, box-shadow .15s, border-color .15s;
+}
+.sw[aria-checked="true"] .dot { background: var(--acc); border-color: var(--acc); box-shadow: var(--dotglow); }
+.sw:hover .dot { border-color: var(--acc); }
+.sw:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.rec {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: var(--acc);
+  animation: blink 2.4s ease-in-out infinite;
+}
+
+/* ---------- Old-TV texture layers ---------- */
+
+.grain {
+  position: fixed;
+  left: -120px;
+  top: -120px;
+  width: calc(100vw + 240px);
+  height: calc(100vh + 240px);
+  pointer-events: none;
+  z-index: 50;
+  opacity: var(--grain-op);
+  mix-blend-mode: var(--gb);
+  animation: grainJit .8s steps(1) infinite;
+}
+.scan {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 49;
+  background: repeating-linear-gradient(0deg, var(--scan) 0, var(--scan) 1px, transparent 1px, transparent 3px);
+}
+.vig { position: fixed; inset: 0; pointer-events: none; z-index: 46; background: var(--vig); }
+.roll {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: -30vh;
+  height: 30vh;
+  pointer-events: none;
+  z-index: 48;
+  background: linear-gradient(180deg, transparent, var(--roll), transparent);
+  animation: roll 8s linear infinite;
+}
+
+/* Signal "tear": two slices of the wordmark that jump sideways now and then. */
+.tear { position: absolute; left: 0; top: 0; pointer-events: none; }
+.t1 { clip-path: inset(22% 0 58% 0); animation: tear1 7s steps(1) infinite; }
+.t2 { clip-path: inset(60% 0 22% 0); animation: tear2 7s steps(1) infinite; }
+.hot .t1 { animation: tearHotA .5s steps(1) infinite; }
+.hot .t2 { animation: tearHotB .6s steps(1) infinite; }
+
+/* Power-on: waits until the fonts have loaded (JS adds "ready"). If JS ever fails,
+   the page still appears after 3.5 seconds. */
+.js:not(.ready) .screen { visibility: hidden; animation: reveal 0s 3.5s forwards; }
+.js.ready .screen { animation: powerOn 1.3s cubic-bezier(.2, .7, .2, 1) backwards; }
+
+@keyframes reveal { to { visibility: visible; } }
+@keyframes powerOn {
+  0% { transform: scale(.05, .004); filter: brightness(var(--pb1)); }
+  30% { transform: scale(1, .004); filter: brightness(var(--pb1)); }
+  75% { transform: scale(1, 1); filter: brightness(var(--pb2)); }
+  100% { transform: scale(1, 1); filter: brightness(1); }
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+@keyframes tear1 { 0%, 90%, 100% { transform: translateX(0); } 91% { transform: translateX(1.6%); } 92% { transform: translateX(-1.2%); } 93% { transform: translateX(.8%); } 94% { transform: translateX(0); } }
+@keyframes tear2 { 0%, 55%, 100% { transform: translateX(0); } 56% { transform: translateX(-1.8%); } 57% { transform: translateX(1%); } 58% { transform: translateX(-.5%); } 59% { transform: translateX(0); } }
+@keyframes tearHotA { 0% { transform: translateX(0); } 20% { transform: translateX(1.4%); } 40% { transform: translateX(-1%); } 60% { transform: translateX(.6%); } 80% { transform: translateX(-.4%); } 100% { transform: translateX(0); } }
+@keyframes tearHotB { 0% { transform: translateX(0); } 20% { transform: translateX(-1.2%); } 40% { transform: translateX(.9%); } 60% { transform: translateX(-.7%); } 80% { transform: translateX(.5%); } 100% { transform: translateX(0); } }
+@keyframes grainJit {
+  0% { transform: translate(0, 0); } 10% { transform: translate(-40px, -80px); } 20% { transform: translate(-90px, 30px); }
+  30% { transform: translate(50px, -100px); } 40% { transform: translate(-30px, 90px); } 50% { transform: translate(-80px, 50px); }
+  60% { transform: translate(90px, 0); } 70% { transform: translate(0, 70px); } 80% { transform: translate(20px, 100px); }
+  90% { transform: translate(-60px, 40px); } 100% { transform: translate(0, 0); }
+}
+@keyframes roll { from { transform: translateY(0); } to { transform: translateY(170vh); } }
+
+/* ---------- Animation off ----------
+   Off when the visitor flips the Animation switch (data-motion="off"), or when their
+   device asks for reduced motion and they haven't switched it back on. */
+html[data-motion="off"] .screen,
+html[data-motion="off"] .rec,
+html[data-motion="off"] .tear,
+html[data-motion="off"] .grain,
+html[data-motion="off"] .roll { animation: none !important; }
+html[data-motion="off"] .roll { display: none; }
+html[data-motion="off"] .screen { visibility: visible !important; }
+html[data-motion="off"] .sw .dot,
+html[data-motion="off"] a.cta { transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="on"]) .screen,
+  html:not([data-motion="on"]) .rec,
+  html:not([data-motion="on"]) .tear,
+  html:not([data-motion="on"]) .grain,
+  html:not([data-motion="on"]) .roll { animation: none !important; }
+  html:not([data-motion="on"]) .roll { display: none; }
+  html:not([data-motion="on"]) .screen { visibility: visible !important; }
+  html:not([data-motion="on"]) .sw .dot,
+  html:not([data-motion="on"]) a.cta { transition: none; }
+}

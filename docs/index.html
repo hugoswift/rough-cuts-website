@@ -1,15 +1,130 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rough Cuts</title>
-  <style>
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center;
-           font-family: system-ui, sans-serif; background: #111; color: #eee; }
-  </style>
+  <title>Rough Cuts — monthly open jam, Levenshulme</title>
+  <meta name="description" content="Rough Cuts is a monthly open jam at The Talleyrand, Levenshulme. Bring an instrument and play with people you haven't met. Dates and details coming soon.">
+  <meta name="theme-color" content="#DAD1BC" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0F0E0D" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://roughcutsjam.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Rough Cuts">
+  <meta property="og:title" content="Rough Cuts — monthly open jam">
+  <meta property="og:description" content="A monthly open jam at The Talleyrand, Levenshulme. Unrehearsed. All levels. Dates and details coming soon.">
+  <meta property="og:url" content="https://roughcutsjam.com/">
+  <meta property="og:image" content="https://roughcutsjam.com/images/share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ROUGH CUTS in heavy black type with an orange offset, on cream paper.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonts load without holding up the page: it appears straight away and the fonts swap in. -->
+  <link id="fonts-css" href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Runs before the page paints: remembers a visitor's switch choices so there is no flash. -->
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try {
+        var t = localStorage.getItem('rc-theme');
+        if (t === 'dark' || t === 'light') d.setAttribute('data-theme', t);
+        var m = localStorage.getItem('rc-motion');
+        if (m === 'on' || m === 'off') d.setAttribute('data-motion', m);
+      } catch (e) {}
+    })();
+  </script>
+  <script src="js/main.js" defer></script>
 </head>
 <body>
-  <h1>Rough Cuts — coming soon</h1>
+
+  <!-- Texture layers: purely decorative -->
+  <svg class="grain" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"></feTurbulence>
+      <feColorMatrix type="saturate" values="0"></feColorMatrix>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)"></rect>
+  </svg>
+  <div class="scan" aria-hidden="true"></div>
+  <div class="vig" aria-hidden="true"></div>
+  <div class="roll" aria-hidden="true"></div>
+
+  <div class="screen">
+
+    <header class="top">
+      <span><span class="rec" aria-hidden="true"></span>Stand by</span>
+      <span>The Talleyrand, Levenshulme</span>
+      <div class="top-end">
+        <button class="sw" id="sw-theme" type="button" role="switch" aria-checked="false"><span class="dot" aria-hidden="true"></span>Dark mode</button>
+        <button class="sw" id="sw-motion" type="button" role="switch" aria-checked="true"><span class="dot" aria-hidden="true"></span>Animation</button>
+        <span>18+</span>
+      </div>
+    </header>
+
+    <main>
+
+      <h1 class="wm-h1" id="wordmark">
+        <svg class="wm-svg wm-main" role="img" aria-label="Rough Cuts" viewBox="0 0 1440 236.4" xmlns="http://www.w3.org/2000/svg">
+          <g class="plate" transform="translate(-2.9 0)">
+            <text class="wm f-acc halo" data-role="full" x="43.2" y="211.5" font-size="288" letter-spacing="-2.9" stroke-linejoin="round">ROUGH CUTS</text>
+            <text class="wm f-acc halo" data-role="rough" display="none" x="0" y="0" font-size="100" stroke-linejoin="round">ROUGH</text>
+            <text class="wm f-acc halo" data-role="cuts" display="none" x="0" y="0" font-size="100" stroke-linejoin="round">CUTS</text>
+          </g>
+          <text class="wm f-ink" data-role="full" x="43.2" y="211.5" font-size="288" letter-spacing="-2.9">ROUGH CUTS</text>
+          <text class="wm f-ink" data-role="rough" display="none" x="0" y="0" font-size="100">ROUGH</text>
+          <text class="wm f-ink" data-role="cuts" display="none" x="0" y="0" font-size="100">CUTS</text>
+        </svg>
+        <svg class="wm-svg tear t1" aria-hidden="true" focusable="false" viewBox="0 0 1440 236.4" xmlns="http://www.w3.org/2000/svg">
+          <text class="wm f-ink" data-role="full" x="43.2" y="211.5" font-size="288" letter-spacing="-2.9">ROUGH CUTS</text>
+          <text class="wm f-ink" data-role="rough" display="none" x="0" y="0" font-size="100">ROUGH</text>
+          <text class="wm f-ink" data-role="cuts" display="none" x="0" y="0" font-size="100">CUTS</text>
+        </svg>
+        <svg class="wm-svg tear t2" aria-hidden="true" focusable="false" viewBox="0 0 1440 236.4" xmlns="http://www.w3.org/2000/svg">
+          <text class="wm f-ink" data-role="full" x="43.2" y="211.5" font-size="288" letter-spacing="-2.9">ROUGH CUTS</text>
+          <text class="wm f-ink" data-role="rough" display="none" x="0" y="0" font-size="100">ROUGH</text>
+          <text class="wm f-ink" data-role="cuts" display="none" x="0" y="0" font-size="100">CUTS</text>
+        </svg>
+      </h1>
+
+      <div class="intro">
+        <div>
+          <h2 class="jam">Open jam</h2>
+          <p class="tagline">Monthly. Unrehearsed. All levels.</p>
+        </div>
+        <div class="signup">
+          <p class="soon">Sign-ups open soon.</p>
+          <!--
+            WHEN THE SIGN-UP FORM EXISTS: replace the "soon" paragraph above with this
+            (put the real form link in place of FORM-LINK-HERE):
+
+            <a class="cta" href="FORM-LINK-HERE">Sign up to play<svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 10h15M11 4l6 6-6 6"></path></svg></a>
+            <p class="cta-note">Sign-ups get the first 90 minutes. Walk-ins welcome after.</p>
+          -->
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="foot">
+      <p class="status">Dates and details soon.</p>
+      <nav aria-label="Elsewhere">
+        <ul>
+          <li><a class="lnk" href="https://www.instagram.com/roughcutsjam/" rel="noopener">Instagram @roughcutsjam</a></li>
+          <li><a class="lnk" href="mailto:hello@roughcutsjam.com">hello@roughcutsjam.com</a></li>
+        </ul>
+      </nav>
+    </footer>
+
+  </div>
+
 </body>
 </html>
