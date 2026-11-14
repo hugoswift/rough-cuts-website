@@ -259,6 +259,8 @@ a.cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
   z-index: 2;
   display: flex;
 }
+/* With the icons showing, start the header below them so they never sit on the text. */
+.js .top { margin-top: 36px; }
 .sw { display: none; }
 .js .sw {
   display: inline-flex;
