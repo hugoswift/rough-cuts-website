@@ -1,68 +1,26 @@
 /* Rough Cuts: coming-soon page.
-   Plain JavaScript, no libraries. Does five things:
+   Plain JavaScript, no libraries. Does four things:
    1. Sizes the ROUGH CUTS wordmark to the width of the screen (stacked on phones).
    2. Makes the orange layer of the wordmark follow the pointer.
-   3. Runs the Dark mode and Animation icon switches in the top-right corner (and remembers them).
-   4. Tells the page when the fonts are ready so the "power-on" can play.
-   5. Checks the animation runs smoothly, and lightens it on devices that struggle.
+   3. Tells the page when the fonts are ready so the "power-on" can play.
+   4. Checks the animation runs smoothly, and lightens it on devices that struggle.
+   Light or dark follows the visitor's device (handled in style.css), and animation is off
+   when the device asks for reduced motion. There are no on-page switches.
    The page still reads fine without any of this. */
 (function () {
   'use strict';
 
   var root = document.documentElement;
   var reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
-  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
-  function save(key, value) {
-    try { localStorage.setItem(key, value); } catch (e) { /* private mode: fine, just not remembered */ }
-  }
+  function motionOn() { return !(reduceQuery && reduceQuery.matches); }
 
-  /* ---------- Switches ---------- */
-
-  var themeBtn = document.getElementById('sw-theme');
-  var motionBtn = document.getElementById('sw-motion');
-
-  function currentTheme() {
-    var t = root.getAttribute('data-theme');
-    if (t === 'dark' || t === 'light') return t;
-    return darkQuery && darkQuery.matches ? 'dark' : 'light';
-  }
-
-  function motionOn() {
-    var m = root.getAttribute('data-motion');
-    if (m === 'off') return false;
-    if (m === 'on') return true;
-    return !(reduceQuery && reduceQuery.matches);
-  }
-
-  function syncSwitches() {
-    if (themeBtn) themeBtn.setAttribute('aria-checked', String(currentTheme() === 'dark'));
-    if (motionBtn) motionBtn.setAttribute('aria-checked', String(motionOn()));
-  }
-
-  if (themeBtn) {
-    themeBtn.addEventListener('click', function () {
-      var next = currentTheme() === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      save('rc-theme', next);
-      syncSwitches();
+  /* If the device switches reduce-motion on while the page is open, settle the orange layer. */
+  if (reduceQuery && reduceQuery.addEventListener) {
+    reduceQuery.addEventListener('change', function () {
+      if (!motionOn()) { pointer.x = 0; pointer.y = 0; setPlate(0, 0); }
     });
   }
-
-  if (motionBtn) {
-    motionBtn.addEventListener('click', function () {
-      var next = motionOn() ? 'off' : 'on';
-      root.setAttribute('data-motion', next);
-      save('rc-motion', next);
-      if (next === 'off') { pointer.x = 0; pointer.y = 0; setPlate(0, 0); }
-      syncSwitches();
-    });
-  }
-
-  /* Follow the device setting until the visitor makes their own choice. */
-  function onQueryChange() { syncSwitches(); }
-  if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener('change', onQueryChange);
-  if (reduceQuery && reduceQuery.addEventListener) reduceQuery.addEventListener('change', onQueryChange);
 
   /* ---------- Wordmark sizing ---------- */
 
@@ -228,7 +186,6 @@
     window.requestAnimationFrame(tick);
   }
 
-  syncSwitches();
   layout();
 
   function loadFonts() {

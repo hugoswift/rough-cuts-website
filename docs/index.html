@@ -29,19 +29,8 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Runs before the page paints: remembers a visitor's switch choices so there is no flash. -->
-  <script>
-    (function () {
-      var d = document.documentElement;
-      d.classList.add('js');
-      try {
-        var t = localStorage.getItem('rc-theme');
-        if (t === 'dark' || t === 'light') d.setAttribute('data-theme', t);
-        var m = localStorage.getItem('rc-motion');
-        if (m === 'on' || m === 'off') d.setAttribute('data-motion', m);
-      } catch (e) {}
-    })();
-  </script>
+  <!-- Runs before the page paints: lets the styles know JavaScript is on (for the power-on). -->
+  <script>document.documentElement.classList.add('js');</script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -65,22 +54,6 @@
       <span>The Talleyrand, Levenshulme</span>
       <span>18+</span>
     </header>
-
-    <!-- Small grey icon switches tucked into the top-right corner -->
-    <div class="corner">
-      <button class="sw" id="sw-theme" type="button" role="switch" aria-checked="false" aria-label="Dark mode" title="Dark mode">
-        <!-- moon: shown in light mode -->
-        <svg class="ic ic-off" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
-        <!-- sun: shown in dark mode -->
-        <svg class="ic ic-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
-      </button>
-      <button class="sw" id="sw-motion" type="button" role="switch" aria-checked="true" aria-label="Animation" title="Animation">
-        <!-- play: shown when animation is off -->
-        <svg class="ic ic-off" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10-6.5z"/></svg>
-        <!-- pause: shown when animation is on -->
-        <svg class="ic ic-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13M16 5.5v13"/></svg>
-      </button>
-    </div>
 
     <main>
 

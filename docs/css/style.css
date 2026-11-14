@@ -1,7 +1,6 @@
 /* Rough Cuts: coming-soon page.
    Plain CSS, no build step. All colours live in the variables just below.
-   Light is the default; dark applies when the visitor's device is set to dark,
-   or when they flip the Dark mode switch. KEEP THE TWO DARK BLOCKS IN SYNC. */
+   Light is the default; dark applies when the visitor's device is set to dark. */
 
 :root {
   --bg: #DAD1BC;
@@ -25,12 +24,11 @@
   --pb2: 1.2;
   --grain-op: .5;
   --halo: .018;
-  --dotglow: 0 0 0 transparent;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root {
     --bg: #0F0E0D;
     --ink: #E8E0CC;
     --acc: #FF5A2B;
@@ -52,35 +50,8 @@
     --pb2: 2;
     --grain-op: .16;
     --halo: 0;
-    --dotglow: 0 0 10px rgba(255, 90, 43, .85);
     color-scheme: dark;
   }
-}
-
-:root[data-theme="dark"] {
-  --bg: #0F0E0D;
-  --ink: #E8E0CC;
-  --acc: #FF5A2B;
-  --acct: #FF5A2B;
-  --dim: #C9C0AA;
-  --btnbg: #E8E0CC;
-  --btnink: #0F0E0D;
-  --hov: #FF5A2B;
-  --hovink: #0F0E0D;
-  --focus: #FF5A2B;
-  --rule: 1px solid rgba(232, 224, 204, .35);
-  --hrule: 1px solid transparent;
-  --scan: rgba(0, 0, 0, .22);
-  --vig: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, .55) 100%);
-  --gb: screen;
-  --roll: rgba(255, 255, 255, .06);
-  --glow: drop-shadow(0 0 28px rgba(255, 90, 43, .28));
-  --pb1: 7;
-  --pb2: 2;
-  --grain-op: .16;
-  --halo: 0;
-  --dotglow: 0 0 10px rgba(255, 90, 43, .85);
-  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -213,7 +184,7 @@ main {
   .tagline { margin-top: 6px; }
 }
 
-/* ---------- Links, button, switches ---------- */
+/* ---------- Links and button ---------- */
 
 a.lnk {
   display: inline-block;
@@ -248,47 +219,6 @@ a.cta {
 }
 a.cta:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--acc); }
 a.cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
-
-/* The switches need JavaScript, so they only appear when it is running. */
-/* Dark mode and Animation switches: two small grey icons in the top-right corner.
-   Hidden without JavaScript, since they need it to work. */
-.corner {
-  position: absolute;
-  top: 0;
-  right: 2px;
-  z-index: 2;
-  display: flex;
-}
-/* With the icons showing, start the header below them so they never sit on the text. */
-.js .top { margin-top: 36px; }
-.sw { display: none; }
-.js .sw {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--dim);
-  opacity: .55;
-  cursor: pointer;
-  transition: opacity .15s, color .15s;
-}
-.sw:hover { opacity: 1; color: var(--acc); }
-.sw:focus-visible { opacity: 1; outline: 2px solid var(--focus); outline-offset: -2px; }
-.ic {
-  width: 14px;
-  height: 14px;
-  fill: currentColor;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.sw[aria-checked="true"] .ic-off,
-.sw[aria-checked="false"] .ic-on { display: none; }
 
 .rec {
   display: inline-block;
@@ -366,33 +296,19 @@ a.cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
 }
 @keyframes roll { from { transform: translateY(0); } to { transform: translateY(170vh); } }
 
-/* ---------- Animation off ----------
-   Off when the visitor flips the Animation switch (data-motion="off"), or when their
-   device asks for reduced motion and they haven't switched it back on. */
-html[data-motion="off"] .screen,
-html[data-motion="off"] .rec,
-html[data-motion="off"] .tear,
-html[data-motion="off"] .grain,
-html[data-motion="off"] .roll { animation: none !important; }
-html[data-motion="off"] .roll { display: none; }
-html[data-motion="off"] .screen { visibility: visible !important; }
-html[data-motion="off"] .sw,
-html[data-motion="off"] a.cta { transition: none; }
+/* Lighter version for devices that can't keep the animation smooth (main.js decides). */
+html[data-perf="lite"] .grain,
+html[data-perf="lite"] .tear { animation: none !important; }
+html[data-perf="lite"] .roll { display: none; }
 
-/* Lighter version for devices that can't keep the animation smooth (main.js decides).
-   Skipped if the visitor has deliberately switched animation back on. */
-html[data-perf="lite"]:not([data-motion="on"]) .grain,
-html[data-perf="lite"]:not([data-motion="on"]) .tear { animation: none !important; }
-html[data-perf="lite"]:not([data-motion="on"]) .roll { display: none; }
-
+/* Animation off when the visitor's device asks for reduced motion. */
 @media (prefers-reduced-motion: reduce) {
-  html:not([data-motion="on"]) .screen,
-  html:not([data-motion="on"]) .rec,
-  html:not([data-motion="on"]) .tear,
-  html:not([data-motion="on"]) .grain,
-  html:not([data-motion="on"]) .roll { animation: none !important; }
-  html:not([data-motion="on"]) .roll { display: none; }
-  html:not([data-motion="on"]) .screen { visibility: visible !important; }
-  html:not([data-motion="on"]) .sw,
-  html:not([data-motion="on"]) a.cta { transition: none; }
+  html .screen,
+  html .rec,
+  html .tear,
+  html .grain,
+  html .roll { animation: none !important; }
+  html .roll { display: none; }
+  html .screen { visibility: visible !important; }
+  html a.cta { transition: none; }
 }
