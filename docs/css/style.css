@@ -205,7 +205,7 @@ main {
   line-height: 1.6;
 }
 
-/* The pile: four polaroids overlapping, each tilted a little as if stuck down by hand. */
+/* The pile: three polaroids overlapping, each tilted a little as if stuck down by hand. */
 .pile {
   position: relative;
   width: 100%;
@@ -253,10 +253,9 @@ main {
   clip-path: polygon(0 6%, 4% 0, 8% 10%, 12% 0, 88% 0, 92% 8%, 96% 0, 100% 10%, 100% 90%, 96% 100%, 92% 92%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 94%);
 }
 
-.snap-1 { --r: -7deg;   left: 1%;  top: 5%;  --tape-x: 8%;  --tape-r: -14deg; }
-.snap-2 { --r: 5deg;    left: 45%; top: 0;   --tape-x: 34%; --tape-r: 3deg; }
-.snap-3 { --r: 3deg;    left: 0;   top: 44%; --tape-x: 30%; --tape-r: -4deg; }
-.snap-4 { --r: -2.5deg; left: 41%; top: 37%; --tape-x: 58%; --tape-r: 12deg; }
+.snap-1 { --r: -6deg;   left: 2%;  top: 4%;  --tape-x: 8%;  --tape-r: -14deg; }
+.snap-2 { --r: 4.5deg;  left: 42%; top: 0;   --tape-x: 40%; --tape-r: 4deg; }
+.snap-3 { --r: -2deg;   left: 20%; top: 41%; --tape-x: 33%; --tape-r: -3deg; }
 
 @media (prefers-color-scheme: dark) {
   .snap {
