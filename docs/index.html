@@ -25,8 +25,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Fonts load without holding up the page: it appears straight away and the fonts swap in. -->
-  <link id="fonts-css" href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
+  <link id="fonts-css" href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="css/style.css">
 
   <!-- Runs before the page paints: remembers a visitor's switch choices so there is no flash. -->
@@ -74,7 +74,13 @@
 
       <h1 class="wm-h1" id="wordmark">
         <svg class="wm-svg wm-main" role="img" aria-label="Rough Cuts" viewBox="0 0 1440 236.4" xmlns="http://www.w3.org/2000/svg">
-          <g class="plate" transform="translate(-2.9 0)">
+          <defs>
+            <!-- Flat crop along the top and bottom of the white lettering; main.js keeps it sized -->
+            <clipPath id="wm-crop" clipPathUnits="userSpaceOnUse">
+              <rect id="wm-crop-rect" x="-10000" y="-31.9" width="30000" height="239.1"/>
+            </clipPath>
+          </defs>
+          <g class="plate" transform="translate(-8.6 8.6)">
             <text class="wm f-acc halo" data-role="full" x="43.2" y="211.5" font-size="288" letter-spacing="-2.9" stroke-linejoin="round">ROUGH CUTS</text>
             <text class="wm f-acc halo" data-role="rough" display="none" x="0" y="0" font-size="100" stroke-linejoin="round">ROUGH</text>
             <text class="wm f-acc halo" data-role="cuts" display="none" x="0" y="0" font-size="100" stroke-linejoin="round">CUTS</text>

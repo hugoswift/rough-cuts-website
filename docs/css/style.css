@@ -92,7 +92,7 @@ body {
   overflow-x: hidden;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
 }
 
 /* ---------- Page structure ---------- */
@@ -134,12 +134,13 @@ main {
   padding: clamp(16px, 2vw, 32px) 0;
 }
 
-.wm-h1 { position: relative; margin: 0; line-height: 0; }
+.wm-h1 { position: relative; margin: 0; line-height: 0; rotate: -1.5deg; } /* slight tilt, rising to the right */
 
 .wm-svg { display: block; width: 100%; height: auto; }
 .wm-main { filter: var(--glow); }
 .wm { font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; font-weight: 400; }
 .f-ink { fill: var(--ink); }
+.wm-svg .f-ink { clip-path: url(#wm-crop); } /* white lettering only; the orange layer stays uncropped */
 .f-acc { fill: var(--acc); }
 .halo { stroke: var(--acc); stroke-width: calc(var(--halo) * var(--fs, 0px)); }
 

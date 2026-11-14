@@ -69,6 +69,8 @@
   var plates = Array.prototype.slice.call(document.querySelectorAll('.plate'));
   var metrics = null;
   var refSize = 288;
+  var cropRect = document.getElementById('wm-crop-rect');
+  var CROP = 0.015;
 
   function r1(n) { return String(Math.round(n * 10) / 10); }
 
@@ -80,7 +82,8 @@
     ctx.font = '200px Anton, Impact, "Arial Narrow", sans-serif';
     function em(s) { return ctx.measureText(s).width / 200 + s.length * -0.01; }
     var ascent = ctx.measureText('ROUGH').actualBoundingBoxAscent;
-    return { full: em('ROUGH CUTS'), rough: em('ROUGH'), cuts: em('CUTS'), cap: (ascent || 144) / 200 };
+    var flat = ctx.measureText('H').actualBoundingBoxAscent; /* height of a flat-topped capital */
+    return { full: em('ROUGH CUTS'), rough: em('ROUGH'), cuts: em('CUTS'), cap: (ascent || 144) / 200, flat: (flat || ascent || 144) / 200 };
   }
 
   function layout() {
@@ -121,6 +124,19 @@
         t.style.setProperty('--fs', r1(s.fs) + 'px');
       });
     });
+
+    /* Crop: trims 1.5% of the letter size off the top and bottom of the white lettering, so
+       round letters (O, G, C, S, U) get flat edges. It treats the wordmark as one block: on one
+       line it trims the top and bottom of the line; stacked, the top of ROUGH and the bottom of
+       CUTS. The orange layer is not cropped. */
+    if (cropRect) {
+      var first = wide ? spec.full : spec.rough;
+      var last = wide ? spec.full : spec.cuts;
+      var cropTop = first.y - m.flat * first.fs + CROP * first.fs;
+      var cropBottom = last.y - CROP * last.fs;
+      cropRect.setAttribute('y', r1(cropTop));
+      cropRect.setAttribute('height', r1(cropBottom - cropTop));
+    }
     setPlate(pointer.x, pointer.y);
   }
 
@@ -129,9 +145,11 @@
   var pointer = { x: 0, y: 0 };
   var frame = 0;
 
+  /* At rest the orange layer sits diagonally behind the lettering: 3% of the letter size
+     left and 3% down. The pointer then nudges it around that resting spot. */
   function setPlate(mx, my) {
-    var tx = -(0.01 + mx * 0.02) * refSize;
-    var ty = my * 0.006 * refSize;
+    var tx = -(0.03 + mx * 0.02) * refSize;
+    var ty = (0.03 + my * 0.006) * refSize;
     plates.forEach(function (g) { g.setAttribute('transform', 'translate(' + r1(tx) + ' ' + r1(ty) + ')'); });
   }
 
@@ -183,7 +201,7 @@
     Promise.all([
       document.fonts.load('200px Anton'),
       document.fonts.load('italic 64px "Instrument Serif"'),
-      document.fonts.load('700 16px "Space Mono"')
+      document.fonts.load('700 16px "Courier Prime"')
     ]).then(ready, ready);
   }
 
