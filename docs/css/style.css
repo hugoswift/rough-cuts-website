@@ -123,7 +123,6 @@ body {
   color: var(--dim);
 }
 
-.top-end { display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; }
 
 main {
   flex: 1;
@@ -251,31 +250,43 @@ a.cta:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--acc); 
 a.cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
 
 /* The switches need JavaScript, so they only appear when it is running. */
+/* Dark mode and Animation switches: two small grey icons in the top-right corner.
+   Hidden without JavaScript, since they need it to work. */
+.corner {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  z-index: 2;
+  display: flex;
+}
 .sw { display: none; }
 .js .sw {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 0 6px;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   border: 0;
   background: none;
-  color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
+  color: var(--dim);
+  opacity: .55;
   cursor: pointer;
+  transition: opacity .15s, color .15s;
 }
-.sw .dot {
-  width: 12px;
-  height: 12px;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  transition: background .15s, box-shadow .15s, border-color .15s;
+.sw:hover { opacity: 1; color: var(--acc); }
+.sw:focus-visible { opacity: 1; outline: 2px solid var(--focus); outline-offset: -2px; }
+.ic {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.sw[aria-checked="true"] .dot { background: var(--acc); border-color: var(--acc); box-shadow: var(--dotglow); }
-.sw:hover .dot { border-color: var(--acc); }
-.sw:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sw[aria-checked="true"] .ic-off,
+.sw[aria-checked="false"] .ic-on { display: none; }
 
 .rec {
   display: inline-block;
@@ -363,8 +374,14 @@ html[data-motion="off"] .grain,
 html[data-motion="off"] .roll { animation: none !important; }
 html[data-motion="off"] .roll { display: none; }
 html[data-motion="off"] .screen { visibility: visible !important; }
-html[data-motion="off"] .sw .dot,
+html[data-motion="off"] .sw,
 html[data-motion="off"] a.cta { transition: none; }
+
+/* Lighter version for devices that can't keep the animation smooth (main.js decides).
+   Skipped if the visitor has deliberately switched animation back on. */
+html[data-perf="lite"]:not([data-motion="on"]) .grain,
+html[data-perf="lite"]:not([data-motion="on"]) .tear { animation: none !important; }
+html[data-perf="lite"]:not([data-motion="on"]) .roll { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="on"]) .screen,
@@ -374,6 +391,6 @@ html[data-motion="off"] a.cta { transition: none; }
   html:not([data-motion="on"]) .roll { animation: none !important; }
   html:not([data-motion="on"]) .roll { display: none; }
   html:not([data-motion="on"]) .screen { visibility: visible !important; }
-  html:not([data-motion="on"]) .sw .dot,
+  html:not([data-motion="on"]) .sw,
   html:not([data-motion="on"]) a.cta { transition: none; }
 }

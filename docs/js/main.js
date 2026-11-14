@@ -1,9 +1,10 @@
 /* Rough Cuts: coming-soon page.
-   Plain JavaScript, no libraries. Does four things:
+   Plain JavaScript, no libraries. Does five things:
    1. Sizes the ROUGH CUTS wordmark to the width of the screen (stacked on phones).
    2. Makes the orange layer of the wordmark follow the pointer.
-   3. Runs the Dark mode and Animation switches in the header (and remembers them).
+   3. Runs the Dark mode and Animation icon switches in the top-right corner (and remembers them).
    4. Tells the page when the fonts are ready so the "power-on" can play.
+   5. Checks the animation runs smoothly, and lightens it on devices that struggle.
    The page still reads fine without any of this. */
 (function () {
   'use strict';
@@ -192,6 +193,39 @@
     metrics = null;
     layout();
     root.classList.add('ready');
+    window.setTimeout(checkSmoothness, 1600); /* after the power-on has finished */
+  }
+
+  /* ---------- Smoothness check ----------
+     Watches the animation for about 1.5 seconds. If the device is struggling (choppy
+     frames), it switches to a lighter version: the grain stops moving and the scan-line
+     roll and glitch flickers are turned off. The wordmark and orange layer stay as they
+     are. Not remembered, so it is re-checked on each visit. */
+  function checkSmoothness() {
+    if (!window.requestAnimationFrame || !motionOn()) return;
+    if (document.visibilityState && document.visibilityState !== 'visible') {
+      document.addEventListener('visibilitychange', function retry() {
+        if (document.visibilityState !== 'visible') return;
+        document.removeEventListener('visibilitychange', retry);
+        window.setTimeout(checkSmoothness, 500);
+      });
+      return;
+    }
+    var frames = 0, slow = 0, last = 0, start = 0, hidden = false;
+    function onHide() { hidden = true; }
+    document.addEventListener('visibilitychange', onHide);
+    function tick(now) {
+      if (!start) { start = last = now; window.requestAnimationFrame(tick); return; }
+      frames++;
+      if (now - last > 34) slow++; /* a frame took longer than about 1/30 of a second */
+      last = now;
+      if (now - start < 1500) { window.requestAnimationFrame(tick); return; }
+      document.removeEventListener('visibilitychange', onHide);
+      if (hidden) { window.setTimeout(checkSmoothness, 1000); return; }
+      var fps = frames / ((now - start) / 1000);
+      if (fps < 40 || slow / frames > 0.25) root.setAttribute('data-perf', 'lite');
+    }
+    window.requestAnimationFrame(tick);
   }
 
   syncSwitches();
