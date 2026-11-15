@@ -188,7 +188,7 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.15) brightness(1.3);
+  filter: grayscale(1) contrast(1.1) brightness(1.5);
   mix-blend-mode: multiply;
 }
 .duo::after {
@@ -241,7 +241,7 @@ main {
       linear-gradient(180deg, transparent 0%, #000 16%, #000 80%, transparent 100%);
             mask-composite: intersect;
   }
-  .bleed img { object-position: 40% 50%; }
+  .bleed img { object-position: 45% 62%; }
   .about-text { max-width: min(46%, 640px); }
 }
 
@@ -378,6 +378,8 @@ main {
 .is-open .n-date,
 .is-tonight .n-date { text-shadow: -.035em .035em 0 var(--acc); }
 .is-past .n-date { color: var(--mute); }
+.is-paused .n-date { color: var(--mute); }
+.is-paused .n-date s { text-decoration-thickness: .08em; text-decoration-color: var(--acc); }
 
 /* ---------- Night buttons and labels ----------
    Rule of thumb: anything with an offset shadow can be pressed; flat labels can't. */
@@ -404,6 +406,9 @@ main {
   color: var(--ink);
   background: repeating-linear-gradient(-45deg, transparent 0 7px, var(--hatch) 7px 9px);
 }
+
+/* Skipped month: flat, solid outline, no shadow */
+.tag-paused { border: 2px solid var(--mute); color: var(--mute); }
 
 /* On the day */
 .tag-tonight { border: 2px solid var(--ink); color: var(--ink); }
@@ -460,10 +465,12 @@ details[open] .ico-rw { rotate: 90deg; }
   text-transform: uppercase;
   color: var(--acct);
 }
-.sets { margin: 0; padding: 0; list-style: none; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.5; }
-.sets li { display: grid; grid-template-columns: 4.5rem 1fr; padding: 6px 0; }
-.sets li + li { border-top: 1px dashed var(--mute); }
-.set-n { font-weight: 700; color: var(--dim); }
+/* Who played: one line per instrument, since players rotate rather than play fixed sets */
+.players { margin: 0; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.5; }
+.players > div { display: grid; grid-template-columns: 5.5rem 1fr; padding: 6px 0; }
+.players > div + div { border-top: 1px dashed var(--mute); }
+.players dt { font-weight: 700; color: var(--dim); }
+.players dd { margin: 0; }
 .r-more { margin: 12px 0 0; font-size: 15px; color: var(--dim); }
 
 /* Best bits: a strip of duotone photos that runs off the right edge of the page */
