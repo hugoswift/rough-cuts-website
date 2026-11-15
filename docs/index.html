@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rough Cuts — monthly open jam, Levenshulme</title>
-  <meta name="description" content="Rough Cuts is a monthly open jam at The Talleyrand, Levenshulme. Bring an instrument and play with people you haven't met. Dates and details coming soon.">
+  <meta name="description" content="Rough Cuts is a monthly open jam at The Talleyrand, Levenshulme. Bring an instrument and play with people you haven't met. Last Thursday of every month, starting 26 November.">
   <meta name="theme-color" content="#DAD1BC" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0F0E0D" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://roughcutsjam.com/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Rough Cuts">
   <meta property="og:title" content="Rough Cuts — monthly open jam">
-  <meta property="og:description" content="A monthly open jam at The Talleyrand, Levenshulme. Unrehearsed. All levels. Dates and details coming soon.">
+  <meta property="og:description" content="A monthly open jam at The Talleyrand, Levenshulme. Unrehearsed. All levels. Last Thursday of every month, starting 26 November.">
   <meta property="og:url" content="https://roughcutsjam.com/">
   <meta property="og:image" content="https://roughcutsjam.com/images/share.jpg">
   <meta property="og:image:width" content="1200">
@@ -94,14 +94,11 @@
           <p class="tagline">Monthly. Unrehearsed. All levels.</p>
         </div>
         <div class="signup">
-          <p class="soon">Sign-ups open soon.</p>
-          <!--
-            WHEN THE SIGN-UP FORM EXISTS: replace the "soon" paragraph above with this
-            (put the real form link in place of FORM-LINK-HERE):
-
-            <a class="cta" href="FORM-LINK-HERE">Sign up to play<svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 10h15M11 4l6 6-6 6"></path></svg></a>
-            <p class="cta-note">Sign-ups get the first 90 minutes. Walk-ins welcome after.</p>
-          -->
+          <!-- Main sign-up button. Each night has its own form: when next month's opens,
+               swap the link here and the date in the note. With no form open, replace both
+               lines with: <p class="soon">Sign-ups open soon.</p> -->
+          <a class="cta" href="https://tally.so/r/vXeo8Q">Sign up to play<svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 10h15M11 4l6 6-6 6"></path></svg></a>
+          <p class="cta-note">For Thursday 26 November. Sign-ups get the first 90 minutes. Walk-ins welcome after.</p>
         </div>
       </div>
 
@@ -109,24 +106,130 @@
 
    </div>
 
-    <!-- Explainer: the paragraph plus a pile of polaroids. Text sits beside the photos on wide
-         screens and above them on narrow ones. Each photo's tilt and place in the pile is set
-         in style.css (.snap-1 to .snap-3). New photos: square crops, about 900 x 900 pixels. -->
+    <!-- Explainer: the paragraph over a big photo that bleeds off the right edge of the page
+         and fades into the paper. The photo is turned black-and-orange ("duotone") by style.css,
+         so any colour photo works. Best size: at least 1800 pixels wide. -->
     <section class="about" aria-labelledby="about-title">
+      <figure class="bleed duo" aria-hidden="true">
+        <img src="images/jam-stage.jpg" width="900" height="900" loading="lazy" alt="">
+      </figure>
       <div class="about-text">
         <p class="kicker">What it is</p>
         <h2 class="about-title" id="about-title">Play something.</h2>
         <p class="about-body">Rough Cuts is a monthly open jam at The Talleyrand in Levenshulme. Bring an instrument, put your name down, and get thrown together with people you haven't met to play something nobody has rehearsed. There's a house drum kit and vocal mics, so you only need to bring yourself and whatever you play. Entry is free, the bar is open, and every level is welcome, from first-timers to lifers. Some of it will be rough. That's the point.</p>
       </div>
-      <div class="pile">
-        <figure class="snap snap-1"><img src="images/jam-drums.jpg" width="900" height="900" loading="lazy" alt="A drummer on a Premier kit next to an electric upright bass player."></figure>
-        <figure class="snap snap-2"><img src="images/jam-guitar.jpg" width="900" height="900" loading="lazy" alt="Close-up of a drum kit with a guitarist playing behind it in front of a Marshall amp."></figure>
-        <figure class="snap snap-3"><img src="images/jam-stage.jpg" width="900" height="900" loading="lazy" alt="The full stage: drums, upright bass, guitar and keys mid-song."></figure>
+    </section>
+
+    <!-- Dates: listed like a band's tour dates. One <li> per night. Each night has a state,
+         set by its class and its button:
+           is-open     sign-ups open: main button, links to that night's form
+           is-full     form has closed: grey label, walk-ins note
+           is-tonight  on the day: blinking dot
+           is-soon     not open yet: grey dashed label
+           is-past     happened: "Rewind" opens the line-up, photos and clips underneath
+       Copy a block, change the date and number, and pick the state. -->
+    <section class="dates" id="dates" aria-labelledby="dates-title">
+      <div class="dates-head">
+        <h2 class="stamp" id="dates-title"><span class="stamp-acc" aria-hidden="true">Last Thursdays</span><span class="stamp-ink">Last Thursdays</span></h2>
+        <p class="dates-sub">Every month at The Talleyrand, Levenshulme. Free entry. 18+.</p>
       </div>
+
+      <ol class="nights">
+
+        <li class="yr" aria-hidden="true"><span>2026</span></li>
+
+        <li class="night is-open">
+          <div class="row">
+            <span class="n-no">No. 01</span>
+            <span class="n-date"><span class="n-day">Thu</span> 26 Nov</span>
+            <span class="n-where">The Talleyrand<span>Levenshulme</span></span>
+            <span class="n-note">First night. Sign up for the first 90 minutes, or walk in for the second.</span>
+            <span class="n-act"><a class="cta" href="https://tally.so/r/vXeo8Q">Sign up to play<svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 10h15M11 4l6 6-6 6"></path></svg></a></span>
+          </div>
+        </li>
+
+        <li class="night is-soon">
+          <div class="row">
+            <span class="n-no">No. 02</span>
+            <span class="n-date"><span class="n-day">Thu</span> 31 Dec</span>
+            <span class="n-where">The Talleyrand<span>Levenshulme</span></span>
+            <span class="n-note">New Year's Eve.</span>
+            <span class="n-act"><span class="tag tag-soon">Sign-ups open nearer the night</span></span>
+          </div>
+        </li>
+
+        <li class="yr" aria-hidden="true"><span>2027</span></li>
+
+        <li class="night is-soon">
+          <div class="row">
+            <span class="n-no">No. 03</span>
+            <span class="n-date"><span class="n-day">Thu</span> 28 Jan</span>
+            <span class="n-where">The Talleyrand<span>Levenshulme</span></span>
+            <span class="n-note"></span>
+            <span class="n-act"><span class="tag tag-soon">Sign-ups open nearer the night</span></span>
+          </div>
+        </li>
+
+        <li class="night is-soon">
+          <div class="row">
+            <span class="n-no">No. 04</span>
+            <span class="n-date"><span class="n-day">Thu</span> 25 Feb</span>
+            <span class="n-where">The Talleyrand<span>Levenshulme</span></span>
+            <span class="n-note"></span>
+            <span class="n-act"><span class="tag tag-soon">Sign-ups open nearer the night</span></span>
+          </div>
+        </li>
+
+        <li class="night is-soon">
+          <div class="row">
+            <span class="n-no">No. 05</span>
+            <span class="n-date"><span class="n-day">Thu</span> 25 Mar</span>
+            <span class="n-where">The Talleyrand<span>Levenshulme</span></span>
+            <span class="n-note"></span>
+            <span class="n-act"><span class="tag tag-soon">Sign-ups open nearer the night</span></span>
+          </div>
+        </li>
+
+        <!-- PAST NIGHT TEMPLATE: after a night, replace its block with this one and fill in
+             the capitals. Photos go in images/ (portrait crops, about 900 x 1125 pixels).
+             Leave out the clip tile if there is no clip.
+        <li class="night is-past">
+          <details>
+            <summary class="row">
+              <span class="n-no">No. 01</span>
+              <span class="n-date"><span class="n-day">Thu</span> 26 Nov</span>
+              <span class="n-where">The Talleyrand<span>Levenshulme</span></span>
+              <span class="n-note">14 players, 6 sets, then a free-for-all.</span>
+              <span class="n-act"><span class="btn2"><svg class="ico-rw" aria-hidden="true" focusable="false" width="20" height="14" viewBox="0 0 20 14" fill="currentColor"><path d="M9 0v14L0 7zM19 0v14l-9-7z"/></svg><span class="lbl-open">Rewind</span><span class="lbl-close">Close</span></span></span>
+            </summary>
+            <div class="report">
+              <div class="r-lineup">
+                <p class="r-quote">ONE LINE ABOUT THE NIGHT.</p>
+                <h3 class="r-h">Who played</h3>
+                <ol class="sets">
+                  <li><span class="set-n">Set 1</span><span>NAME (drums), NAME (bass), NAME (guitar), NAME (vocals)</span></li>
+                  <li><span class="set-n">Set 2</span><span>NAME (drums), NAME (bass), NAME (keys)</span></li>
+                </ol>
+                <p class="r-more">Plus everyone who walked in for the second half.</p>
+              </div>
+              <div class="r-bits">
+                <h3 class="r-h">Best bits</h3>
+                <div class="strip">
+                  <figure class="duo"><img src="images/PHOTO.jpg" width="900" height="1125" loading="lazy" alt="DESCRIBE THE PHOTO"></figure>
+                  <figure class="duo"><img src="images/PHOTO.jpg" width="900" height="1125" loading="lazy" alt="DESCRIBE THE PHOTO"></figure>
+                  <a class="clip" href="INSTAGRAM-CLIP-LINK" rel="noopener"><figure class="duo" aria-hidden="true"><img src="images/PHOTO.jpg" width="900" height="1125" loading="lazy" alt=""></figure><svg aria-hidden="true" focusable="false" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="28" cy="28" r="26"/><path d="M23 18l14 10-14 10z" fill="currentColor"/></svg><span>Watch the clip</span></a>
+                </div>
+              </div>
+            </div>
+          </details>
+        </li>
+        -->
+
+      </ol>
     </section>
 
     <footer class="foot">
-      <p class="status">Dates and details soon.</p>
+      <p class="status">Next jam: Thursday 26 November</p>
       <nav aria-label="Elsewhere">
         <ul>
           <li><a class="lnk" href="https://www.instagram.com/roughcutsjam/" rel="noopener">Instagram @roughcutsjam</a></li>
