@@ -30,7 +30,12 @@
   <link rel="stylesheet" href="css/style.css">
 
   <!-- Runs before the page paints: lets the styles know JavaScript is on (for the power-on). -->
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    document.documentElement.classList.add('js');
+    /* Always open at the top so the power-on plays on the first screen. Without this, a reload
+       brings the visitor back to where they had scrolled. Links to a section (#dates) still work. */
+    if ('scrollRestoration' in history && !location.hash) history.scrollRestoration = 'manual';
+  </script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
