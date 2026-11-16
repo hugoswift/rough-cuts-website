@@ -584,12 +584,17 @@ a.cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
 
 /* ---------- Old-TV texture layers ---------- */
 
+/* Grain: one small seamless noise tile, repeated. (A single full-screen noise filter gets
+   cut off on large or high-resolution screens, which showed as a jumping vertical line.) */
 .grain {
   position: fixed;
   left: -120px;
   top: -120px;
   width: calc(100vw + 240px);
   height: calc(100vh + 240px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  background-repeat: repeat;
   pointer-events: none;
   z-index: 50;
   opacity: var(--grain-op);
