@@ -105,6 +105,8 @@ body {
   text-transform: uppercase;
   color: var(--dim);
 }
+/* Keep the last item (18+) on the right, even when it wraps to a second line on narrow phones. */
+.top > :last-child { margin-left: auto; }
 
 
 main {
