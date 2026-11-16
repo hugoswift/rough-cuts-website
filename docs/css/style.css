@@ -24,6 +24,10 @@
   --pb2: 1.2;
   --grain-op: .5;
   --halo: .018;
+  --mute: #5C5447;     /* dead labels: still readable on paper */
+  --hatch: rgba(19, 18, 17, .14);
+  --duo-lo: #131211;   /* duotone shadows */
+  --gut: clamp(20px, 3vw, 44px);
   color-scheme: light;
 }
 
@@ -50,6 +54,9 @@
     --pb2: 2;
     --grain-op: .16;
     --halo: 0;
+    --mute: #9C937F;
+    --hatch: rgba(232, 224, 204, .14);
+    --duo-lo: #0F0E0D;
     color-scheme: dark;
   }
 }
@@ -165,18 +172,77 @@ main {
   color: var(--dim);
 }
 
-/* ---------- Explainer: paragraph and polaroids ---------- */
+/* ---------- Duotone photos ----------
+   Any colour photo inside a .duo frame is shown in two colours: shadows in ink,
+   highlights in orange, matching the social posts. */
 
-.about {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(40px, 6vw, 72px);
-  align-items: center;
-  padding: clamp(56px, 8vw, 120px) clamp(20px, 3vw, 44px) clamp(64px, 9vw, 140px);
+.duo {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--acc);
+}
+.duo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.1) brightness(1.5);
+  mix-blend-mode: multiply;
+}
+.duo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--duo-lo);
+  mix-blend-mode: lighten;
+  pointer-events: none;
 }
 
+/* ---------- Explainer: text over a photo that bleeds off the right edge ---------- */
+
+.about {
+  position: relative;
+  display: grid;
+  align-items: center;
+  padding: 0 var(--gut) clamp(48px, 7vw, 100px);
+}
+
+.bleed {
+  width: calc(100% + 2 * var(--gut));
+  margin: 0 calc(-1 * var(--gut)) -18vw;
+  aspect-ratio: 1 / .9;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 55%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 55%, transparent 100%);
+}
+
+.about-text { position: relative; z-index: 1; }
+
 @media (min-width: 900px) {
-  .about { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+  .about {
+    min-height: clamp(620px, 58vw, 1000px);
+    padding: clamp(56px, 8vw, 120px) var(--gut);
+  }
+  .bleed {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 62%;
+    margin: 0;
+    aspect-ratio: auto;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, #000 42%),
+      linear-gradient(180deg, transparent 0%, #000 16%, #000 80%, transparent 100%);
+    -webkit-mask-composite: source-in;
+            mask-image:
+      linear-gradient(90deg, transparent 0%, #000 42%),
+      linear-gradient(180deg, transparent 0%, #000 16%, #000 80%, transparent 100%);
+            mask-composite: intersect;
+  }
+  .bleed img { object-position: 45% 62%; }
+  .about-text { max-width: min(46%, 640px); }
 }
 
 .kicker {
@@ -205,67 +271,245 @@ main {
   line-height: 1.6;
 }
 
-/* The pile: three polaroids overlapping, each tilted a little as if stuck down by hand. */
-.pile {
-  position: relative;
-  width: 100%;
-  max-width: 580px;
-  aspect-ratio: 1 / 1.15;
-  margin-inline: auto;
-}
+/* ---------- Dates: listed like tour dates ---------- */
 
-.snap {
-  --r: 0deg;
-  position: absolute;
-  width: 54%;
+.dates { padding: clamp(24px, 4vw, 64px) 0 clamp(64px, 9vw, 140px); }
+
+.dates-head { padding: 0 var(--gut); }
+
+/* Big stamped heading: ink lettering over an orange copy, offset like the wordmark */
+.stamp {
+  display: grid;
   margin: 0;
-  padding: 5.5% 5.5% 20%;            /* the polaroid border: thin sides, deep bottom */
-  background: #FBF9F4;
-  rotate: var(--r);
-  box-shadow:
-    0 1px 2px rgba(30, 20, 10, .28),
-    0 6px 10px -2px rgba(30, 20, 10, .22),
-    0 18px 30px -8px rgba(30, 20, 10, .35);
+  font-family: 'Anton', Impact, 'Arial Narrow', sans-serif;
+  font-weight: 400;
+  font-size: clamp(60px, 14.6vw, 260px);
+  line-height: .84;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  rotate: -1.5deg;
+  transform-origin: left bottom;
+}
+.stamp > span { grid-area: 1 / 1; position: relative; }
+.stamp-acc { color: var(--acc); translate: -.03em .03em; }
+.stamp-ink { color: var(--ink); z-index: 1; }
+@media (max-width: 699px) { .stamp { font-size: 21vw; } }
+
+.dates-sub {
+  margin: clamp(14px, 1.6vw, 24px) 0 0;
+  font-size: clamp(16px, 1.6vw, 24px);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
 }
 
-.snap img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;                   /* always square, whatever photo goes in */
-  object-fit: cover;
-  background: #2B2824;
+.nights {
+  --dfs: clamp(44px, 5.4vw, 96px);
+  margin: clamp(32px, 4vw, 64px) var(--gut) 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule);
 }
 
-/* Masking tape across the top of each photo */
-.snap::before {
-  content: '';
-  position: absolute;
-  z-index: 1;
-  top: -4%;
-  left: var(--tape-x, 33%);
-  width: 34%;
-  height: 9%;
-  background: rgba(232, 222, 196, .72);
-  box-shadow: 0 1px 2px rgba(30, 20, 10, .12);
-  rotate: var(--tape-r, -3deg);
-  /* ragged torn ends */
-  clip-path: polygon(0 6%, 4% 0, 8% 10%, 12% 0, 88% 0, 92% 8%, 96% 0, 100% 10%, 100% 90%, 96% 100%, 92% 92%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 94%);
+/* Year divider, like on a tour poster */
+.yr {
+  padding: 10px 0 4px;
+  font-size: clamp(13px, 1.1vw, 16px);
+  font-weight: 700;
+  letter-spacing: .2em;
+  color: var(--acct);
 }
 
-.snap-1 { --r: -6deg;   left: 2%;  top: 4%;  --tape-x: 8%;  --tape-r: -14deg; }
-.snap-2 { --r: 4.5deg;  left: 42%; top: 0;   --tape-x: 40%; --tape-r: 4deg; }
-.snap-3 { --r: -2deg;   left: 20%; top: 41%; --tape-x: 33%; --tape-r: -3deg; }
+.night { border-bottom: var(--rule); }
 
-@media (prefers-color-scheme: dark) {
-  .snap {
-    background: #EDE8DC;
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, .6),
-      0 18px 34px -8px rgba(0, 0, 0, .8);
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "date date"
+    "no   no"
+    "note note"
+    "act  act";
+  align-items: center;
+  gap: 6px 24px;
+  padding: clamp(16px, 1.8vw, 26px) 0;
+}
+
+@media (min-width: 900px) {
+  .row {
+    grid-template-columns: 4.5rem calc(var(--dfs) * 4.7) minmax(0, .9fr) minmax(0, 1.2fr) auto;
+    grid-template-areas: "no date where note act";
+    gap: 0 clamp(20px, 2.4vw, 40px);
   }
-  .snap::before { background: rgba(220, 208, 178, .55); }
 }
+
+.n-no { grid-area: no; font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.n-date {
+  grid-area: date;
+  font-family: 'Anton', Impact, 'Arial Narrow', sans-serif;
+  font-size: var(--dfs);
+  line-height: .9;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.n-day { color: var(--acct); }
+.n-where {
+  display: none;
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.n-where span { display: block; font-weight: 400; letter-spacing: .06em; color: var(--dim); }
+@media (min-width: 900px) {
+  .n-where { display: block; grid-area: where; }
+}
+.n-note { grid-area: note; max-width: 40ch; font-size: clamp(15px, 1.2vw, 17px); line-height: 1.45; color: var(--dim); }
+.n-note:empty { display: none; }
+.n-act { grid-area: act; justify-self: start; margin-top: 10px; }
+@media (min-width: 900px) {
+  .n-note:empty { display: block; }
+  .n-act { justify-self: end; margin-top: 0; }
+}
+
+/* Date styles by state: future nights are hollow, the live one gets the orange offset */
+.is-soon .n-date { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+.is-soon .n-day { color: transparent; -webkit-text-stroke-color: var(--acct); }
+.is-open .n-date,
+.is-tonight .n-date { text-shadow: -.035em .035em 0 var(--acc); }
+.is-past .n-date { color: var(--mute); }
+.is-paused .n-date { color: var(--mute); }
+.is-paused .n-date s { text-decoration-thickness: .08em; text-decoration-color: var(--acc); }
+
+/* ---------- Night buttons and labels ----------
+   Rule of thumb: anything with an offset shadow can be pressed; flat labels can't. */
+
+.tag, .btn2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 20px;
+  font-size: clamp(14px, 1.15vw, 17px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Not open yet: dashed outline, no shadow */
+.tag-soon { border: 2px dashed var(--mute); color: var(--mute); }
+
+/* Form closed: flat, hatched */
+.tag-full {
+  border: 2px solid var(--mute);
+  color: var(--ink);
+  background: repeating-linear-gradient(-45deg, transparent 0 7px, var(--hatch) 7px 9px);
+}
+
+/* Skipped month: flat, solid outline, no shadow */
+.tag-paused { border: 2px solid var(--mute); color: var(--mute); }
+
+/* On the day */
+.tag-tonight { border: 2px solid var(--ink); color: var(--ink); }
+.tag-tonight .rec { margin-right: 0; }
+
+/* Secondary button (Rewind): outline version of the main button, smaller orange offset */
+.btn2 {
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  background: var(--bg);
+  box-shadow: 4px 4px 0 var(--acc);
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s, background .12s, color .12s;
+}
+.btn2:hover, summary:hover .btn2 { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--acc); background: var(--ink); color: var(--bg); }
+.btn2 svg { flex: none; }
+
+/* ---------- Past nights: Rewind opens the report underneath ---------- */
+
+.night details > summary { list-style: none; cursor: pointer; }
+.night details > summary::-webkit-details-marker { display: none; }
+.night details > summary:focus { outline: none; }
+.night details > summary:focus-visible .btn2 { outline: 3px solid var(--focus); outline-offset: 5px; }
+.lbl-close { display: none; }
+details[open] .lbl-open { display: none; }
+details[open] .lbl-close { display: inline; }
+details[open] .btn2 { background: var(--ink); color: var(--bg); }
+details[open] .ico-rw { rotate: 90deg; }
+
+.report {
+  display: grid;
+  gap: clamp(28px, 3vw, 48px);
+  padding: 4px 0 clamp(36px, 4vw, 64px);
+}
+@media (min-width: 900px) {
+  .report { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: start; }
+}
+
+.r-quote {
+  margin: 0 0 clamp(18px, 2vw, 28px);
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(30px, 3vw, 48px);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+}
+.r-h {
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: var(--rule);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--acct);
+}
+/* Who played: one line per instrument, since players rotate rather than play fixed sets */
+.players { margin: 0; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.5; }
+.players > div { display: grid; grid-template-columns: 5.5rem 1fr; padding: 6px 0; }
+.players > div + div { border-top: 1px dashed var(--mute); }
+.players dt { font-weight: 700; color: var(--dim); }
+.players dd { margin: 0; }
+.r-more { margin: 12px 0 0; font-size: 15px; color: var(--dim); }
+
+/* Best bits: a strip of duotone photos that runs off the right edge of the page */
+.r-bits { min-width: 0; margin-right: calc(-1 * var(--gut)); }
+.r-bits .r-h { margin-right: var(--gut); }
+.strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 1fr);
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+}
+.strip > * { scroll-snap-align: start; aspect-ratio: 4 / 5; }
+@media (max-width: 899px) { .strip { grid-auto-columns: 62%; } }
+
+/* Clip tile: links to the clip on Instagram */
+.clip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px;
+  color: #E8E0CC;
+  background: #131211;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.clip .duo { position: absolute; inset: 0; opacity: .55; }
+.clip span, .clip svg { position: relative; z-index: 1; }
+.clip span { align-self: flex-start; padding: 4px 8px; background: #131211; }
+.clip svg { width: 56px; height: 56px; transition: transform .15s; }
+.clip:hover svg { transform: scale(1.1); }
+.clip:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 
 .foot {
   display: flex;
@@ -307,7 +551,8 @@ a.lnk {
 a.lnk:hover { background: var(--hov); color: var(--hovink); }
 a.lnk:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 
-/* Sign-up button: not shown yet. Its markup is in a comment in index.html. */
+/* Main button: solid, with an orange offset that presses in on hover. Used in the opening
+   screen and for whichever night has sign-ups open. */
 a.cta {
   display: inline-flex;
   align-items: center;
@@ -417,5 +662,5 @@ html[data-perf="lite"] .roll { display: none; }
   html .roll { animation: none !important; }
   html .roll { display: none; }
   html .screen { visibility: visible !important; }
-  html a.cta { transition: none; }
+  html a.cta, html .btn2, html .clip svg { transition: none; }
 }
