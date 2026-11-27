@@ -74,3 +74,4 @@ them here, and reuse them everywhere instead of inventing new values._
 Record agreed decisions here (date, what, who) so both Claudes follow them.
 
 - 2026-11-13: Site published from `docs/`; `main` protected and changed by pull requests only. (Hugo)
+- 2026-11-27: Past nights move out of the upcoming dates into a "Recent nights" list underneath, newest first, so the next night is always seen first. (James)
