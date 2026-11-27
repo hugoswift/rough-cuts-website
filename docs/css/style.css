@@ -474,6 +474,17 @@ details[open] .ico-rw { rotate: 90deg; }
 .players dt { font-weight: 700; color: var(--dim); }
 .players dd { margin: 0; }
 .r-more { margin: 12px 0 0; font-size: 15px; color: var(--dim); }
+.r-pending { margin: 0; padding-right: var(--gut); font-size: clamp(15px, 1.15vw, 17px); color: var(--dim); }
+
+/* Recent nights: a second, quieter list under the upcoming dates */
+.past-h {
+  margin: clamp(56px, 7vw, 112px) var(--gut) 0;
+  font-size: clamp(16px, 1.6vw, 24px);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.nights-past { margin-top: clamp(14px, 1.6vw, 24px); }
 
 /* Best bits: a strip of duotone photos that runs off the right edge of the page */
 .r-bits { min-width: 0; margin-right: calc(-1 * var(--gut)); }
